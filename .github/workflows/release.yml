@@ -15,6 +15,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,16 +42,15 @@ jobs:
           npm pack --silent
           echo "tarball=$(ls vfq-dxp-ui-*.tgz | head -n 1)" >> "$GITHUB_OUTPUT"
 
-      # The scope (@vfq) is the package's name in package.json; the token is a repository secret.
-      - name: Publish to the registry
-        run: npm publish "${{ steps.pack.outputs.tarball }}" --access restricted
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: GitHub release with the tarball
         run: gh release create "${GITHUB_REF_NAME}" "${{ steps.pack.outputs.tarball }}" --title "${GITHUB_REF_NAME}" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
+
+      # The scope (@vfq) is the package's name in package.json; the token is a repository secret.
+      - name: Publish to the registry (only when NPM_TOKEN is set)
+        if: ${{ env.NODE_AUTH_TOKEN != '' }}
+        run: npm publish "${{ steps.pack.outputs.tarball }}" --access restricted
 
       # Optional: tell the application repository (set the repository variable DXP_APP_REPO = owner/prototype and the secret DXP_APP_DISPATCH_TOKEN).
       - name: Notify the application repository
