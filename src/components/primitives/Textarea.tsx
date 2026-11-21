@@ -1,0 +1,53 @@
+import { useId } from 'react';
+import type { TextareaHTMLAttributes } from 'react';
+import { Label } from '../ui/label';
+import { Textarea as FieldArea } from '../ui/textarea';
+
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+  helperText?: string;
+}
+
+export function Textarea({ label, error, helperText, className = '', id, 'aria-describedby': ariaDescribedby, placeholder: _noPlaceholder, ...rest }: TextareaProps) {
+  // No placeholder / watermark text in any field: the label says what it is. (The prop is accepted so call sites need no change.)
+  const autoId = useId();
+  const textareaId = id ?? `textarea-${autoId}`;
+  const helperId = `${textareaId}-helper`;
+  const errorId = `${textareaId}-error`;
+  const describedBy = [ariaDescribedby, error ? errorId : helperText ? helperId : undefined].filter(Boolean).join(' ') || undefined;
+  return (
+    <div className="stack gap-1">
+      {label && (
+        <Label htmlFor={textareaId} className={`text-[length:var(--fs-label)] ${rest.disabled ? 'text-[var(--field-label-disabled)]' : 'text-fg'}`}>
+          {label}
+          {/* Same required marker as Input: aria-hidden, the textarea carries aria-required. */}
+          {rest.required && (
+            <span className="text-[var(--field-border-error)]" aria-hidden="true">
+              {' *'}
+            </span>
+          )}
+        </Label>
+      )}
+      <FieldArea
+        id={textareaId}
+        rows={4}
+        aria-describedby={describedBy}
+        aria-invalid={error ? true : undefined}
+        aria-required={rest.required || undefined}
+        className={className}
+        {...rest}
+      />
+      {helperText && !error && (
+        <span id={helperId} className="caption-muted">
+          {helperText}
+        </span>
+      )}
+      {error && (
+        <span id={errorId} role="alert" className="text-[length:var(--fs-caption)] text-[var(--field-border-error)]">
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}

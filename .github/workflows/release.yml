@@ -1,0 +1,61 @@
+name: Release
+
+# Publishing a release: push a tag `v<version>` that matches package.json (npm version <patch|minor|major> creates it).
+# Builds and checks the package, publishes it to the registry, attaches the tarball to a GitHub release, and tells the application repository
+# (a repository_dispatch event `dxp-ui-released`) that a new version exists.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+
+      - name: The tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "${GITHUB_REF_NAME}"
+
+      - run: npm run typecheck
+      - run: npx oxlint --deny-warnings
+      - run: npm test
+      - run: npm run build
+
+      - name: Pack
+        id: pack
+        run: |
+          npm pack --silent
+          echo "tarball=$(ls vfq-dxp-ui-*.tgz | head -n 1)" >> "$GITHUB_OUTPUT"
+
+      # The scope (@vfq) is the package's name in package.json; the token is a repository secret.
+      - name: Publish to the registry
+        run: npm publish "${{ steps.pack.outputs.tarball }}" --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: GitHub release with the tarball
+        run: gh release create "${GITHUB_REF_NAME}" "${{ steps.pack.outputs.tarball }}" --title "${GITHUB_REF_NAME}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      # Optional: tell the application repository (set the repository variable DXP_APP_REPO = owner/prototype and the secret DXP_APP_DISPATCH_TOKEN).
+      - name: Notify the application repository
+        if: ${{ vars.DXP_APP_REPO != '' }}
+        run: |
+          gh api "repos/${{ vars.DXP_APP_REPO }}/dispatches" -f event_type=dxp-ui-released \
+            -f "client_payload[source]=${{ github.server_url }}/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/${{ steps.pack.outputs.tarball }}"
+        env:
+          GH_TOKEN: ${{ secrets.DXP_APP_DISPATCH_TOKEN }}

@@ -1,0 +1,8 @@
+/* The preview's one stylesheet entry: Tailwind over the library's own sources and its stories, then the library CSS exactly as a consumer imports it
+ * (preset, components, tooltip pack). It declares no rule of its own. */
+@import "tailwindcss" source("../src");
+@source "../stories";
+@import "../src/styles/preset.css";
+@import "../src/styles/components.css";
+@import "../src/components/primitives/tooltip-tokens.css";
+@import "../src/components/primitives/tooltip.css";

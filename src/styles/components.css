@@ -1,0 +1,863 @@
+/* @vfq/dxp-ui - the semantic component classes of the design system (@layer components). Source for Tailwind consumers; dist/styles.css has it compiled. */
+/* The semantic UI layer: one class per reusable UI component, its variants, sizes and states, written once on top of the design tokens.
+ *
+ *   .component            the component          .btn  .card  .badge  .tab  .form-control  .modal-dialog
+ *   .component-variant    what kind of one       .btn-primary  .btn-secondary  .badge-success  .card-selected
+ *   .component-size       how big                .btn-sm  .btn-md  .btn-lg
+ *   .component-state      what condition         .tab[data-state=active]  .form-control-error  .form-control-readonly  .card-selected
+ *
+ * Each class holds the utilities, tokens and interaction states (hover, focus, active, disabled) that used to be repeated on every element, via @apply,
+ * so a rendered element reads `class="btn btn-primary btn-lg"` and the look is the same as before. All of it is in @layer components: a call site's own
+ * utility (a width, a margin, a one-off colour) still overrides it. The React components in components/primitives apply these classes; use them
+ * (or the component) rather than copying utility strings. Listed, with a live example of each, in Administration > UI Components Library.
+ */
+@layer components {
+  /* ------------------------------------------------------------------ Cards */
+  /* The card shell: radius, 1px card border and the page-card fill. Spacing and any one-off colour stay on the element. .card-surface swaps the fill
+     for the quieter --surface. */
+  .card {
+    border-radius: var(--radius-card);
+    border: 1px solid var(--field-card-border);
+    background-color: var(--bg);
+  }
+  /* The selectable-card states, one definition for every card grid (offers, plans, numbers, ID types). Hover: the pale teal fill and the form fields' focus border colour (a selected card keeps its own red border). */
+  .card-idle {
+    @apply border-[var(--field-card-border)] bg-bg hover:bg-[var(--field-card-hover-bg)] hover:border-[var(--field-focus-border)];
+  }
+  .card-selected {
+    @apply border-[var(--field-card-selected)] bg-[linear-gradient(135deg,var(--surface-warm),var(--bg)_90%)] shadow-[var(--shadow-selected-ring)];
+  }
+  /* A card the app singles out (the Recommended offer): blue border, flat soft blue wash. */
+  .card-highlight {
+    @apply border-[var(--signal-blue)] bg-[var(--tone-blue-bg-soft)] hover:bg-[var(--tone-blue-bg-hover)];
+  }
+  /* The selected mark on a selectable card (SelectedTick): a red circle with a tick on the card's top-right corner. The card must be `relative`; the
+     tick is only rendered while the card is selected. It gives "selected" a shape cue beside the colour, so a selected card is never mistaken for a red
+     status badge (those carry a flat tile and never a tick). */
+  .card-tick {
+    display: flex;
+    position: absolute;
+    top: -0.625rem;
+    right: -0.625rem;
+    z-index: var(--z-raised);
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-circle);
+    background-color: var(--accent);
+    color: var(--accent-on);
+    box-shadow: var(--shadow-selected-ring);
+  }
+
+  /* ---------------------------------------------------------------- Buttons */
+  /* The fill of a secondary button follows what it sits on: the page tint on a white surface (card, dialog, header band), white on the grey page
+     itself - a page-tint button there would disappear into the background. The surface sets the pair below. */
+  #main-content {
+    --btn-secondary-fill: var(--bg);
+    --btn-secondary-hover: var(--icon-tile-bg);
+  }
+  /* .card-inherit-fill (a marker, no rules of its own) keeps a card from setting the pair, so buttons inside follow what the card sits on. */
+  header,
+[role='dialog'] {
+    --btn-secondary-fill: var(--icon-tile-bg);
+    --btn-secondary-hover: var(--bg);
+  }
+  /* The secondary surface (a Button, and the link-styled buttons beside one): the page-tint fill, the standard grey border and a bold label; white on
+     hover. Colour only - on a Button, .btn.btn-secondary adds the box. !important: the base font-medium would otherwise win over this layered class. */
+  .btn-secondary {
+    border-color: var(--border);
+    background: var(--btn-secondary-fill);
+    color: var(--fg);
+    font-weight: var(--fw-bold) !important;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--btn-secondary-hover);
+  }
+
+  /* .btn: what every button shares. Variants follow it (.btn-primary, .btn-secondary, .btn-tertiary, .btn-destructive), then a size (.btn-sm, .btn-md,
+     .btn-lg); a text-link button (.btn-tertiary) has no box and sets its own text size. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium tracking-[var(--tracking-btn)] transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--motion-fast)] disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  /* The primary fill: --accent-gradient, white label, a transparent 1px border (so a primary and a secondary side by side are the same height). The
+     disabled state is a flat --accent-disabled: `disabled:bg-none` clears the gradient image so the flat colour shows. */
+  .btn-primary {
+    @apply border-transparent bg-[image:var(--accent-gradient)] text-accent-on font-bold! border enabled:hover:bg-[image:var(--accent-gradient-hover)] enabled:active:scale-[0.99] disabled:opacity-100 disabled:bg-none disabled:bg-[var(--accent-disabled)] rounded-[var(--radius-button)] px-4 py-2;
+  }
+  .btn.btn-secondary {
+    @apply border rounded-[var(--radius-button)] px-4 py-2;
+  }
+  /* A text link that acts like a button: no box, so no padding or border. The weight is the base font-medium (500): the old utility list also named
+     font-bold, but font-medium won over it, so the rendered weight has always been 500 and stays so. */
+  .btn-tertiary {
+    @apply text-link hover:underline underline-offset-2 rounded-[var(--radius-sm)] focus-visible:shadow-[var(--focus-ring)] focus:outline-none text-[length:var(--fs-body)];
+  }
+  /* Solid danger red (no gradient, so it never reads as the primary call to action). */
+  .btn-destructive {
+    @apply border border-transparent bg-danger-solid text-on-dark font-bold! enabled:hover:bg-danger-solid-hover enabled:active:scale-[0.99] disabled:opacity-100 disabled:bg-tone-danger rounded-[var(--radius-button)] px-4 py-2;
+  }
+  .btn-sm {
+    @apply text-[length:var(--fs-btn-compact)] min-h-[var(--control-h-sm)];
+  }
+  .btn-md {
+    @apply text-[length:var(--fs-btn)] min-h-[var(--control-h-md)];
+  }
+  .btn-lg {
+    @apply text-[length:var(--fs-body-lg)] px-6! py-3! min-h-[var(--control-h-lg)];
+  }
+  /* The icon-only button (a 36px hit area, 28px small), and the close control of a dialog. */
+  .btn-icon {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-button)] text-muted hover:text-fg focus:outline-none focus-visible:shadow-[var(--focus-ring)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors;
+  }
+  .btn-icon-sm {
+    @apply h-7 w-7;
+  }
+  .btn-icon-danger {
+    @apply hover:text-danger;
+  }
+  .btn-icon-bordered {
+    @apply border border-[var(--field-card-border)] bg-bg;
+  }
+  .btn-close {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-button)] text-fg-2 hover:bg-[var(--icon-tile-bg)] hover:text-fg focus:outline-none focus-visible:shadow-[var(--focus-ring)] transition-colors;
+  }
+
+  /* ------------------------------------------------------------ Tags & badges */
+  /* Red text uses --accent-text (the app-wide `.text-accent` rule in index.css does the same), never the fill red: it must clear 4.5:1 on the tint. */
+  /* The pill: a status, a category or a service type. Colour comes from the variant (.badge-success ...) or, for a service type, from lib/serviceTypeTag. */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] px-2.5 py-0.5 text-[length:var(--fs-tag)] font-medium whitespace-nowrap shrink-0;
+  }
+  .badge-outlined-red {
+    @apply border border-accent text-[var(--accent-text)] bg-transparent;
+  }
+  .badge-filled-neutral {
+    @apply bg-light-neutral text-fg-2;
+  }
+  .badge-success {
+    @apply bg-bg border border-[var(--success-border)] text-success;
+  }
+  .badge-success-solid {
+    @apply bg-[var(--badge-success-solid)] text-on-dark border border-transparent;
+  }
+  .badge-warning {
+    @apply bg-bg border border-[var(--warn-border)] text-[var(--warn-text)];
+  }
+  .badge-danger {
+    @apply bg-bg border border-[var(--danger-border)] text-danger;
+  }
+  .badge-danger-solid {
+    @apply bg-[var(--danger-solid)] text-on-dark border border-transparent;
+  }
+  .badge-info {
+    @apply bg-bg border border-[var(--info-border)] text-[var(--info)];
+  }
+  .badge-accent {
+    @apply bg-accent text-accent-on;
+  }
+  .badge-tag-blue {
+    @apply bg-[var(--tag-blue-bg)] text-[var(--tag-blue-fg)] border border-transparent;
+  }
+  .badge-tag-amber {
+    @apply bg-[var(--tag-amber-bg)] text-[var(--warn-text)] border border-transparent;
+  }
+  .badge-tag-green {
+    @apply bg-tone-success text-[var(--success-on-tint)] border border-transparent;
+  }
+  .badge-tag-violet {
+    @apply bg-tone-info text-[var(--info)] border border-transparent;
+  }
+  .badge-tag-red {
+    @apply bg-tone-accent text-[var(--accent-text)] border border-transparent;
+  }
+  .badge-tag-primary {
+    @apply bg-[var(--tag-primary-bg)] text-[var(--tag-primary-fg)] border border-transparent;
+  }
+
+  /* -------------------------------------------------------------------- Tabs */
+  /* The tab design, used by TabStrip at every depth. Two looks, by what the tabs do:
+     - the underline strip (the navigation variant, the default) for page-level and section tabs - tabs that move between sections: .tab-strip, its .tab buttons, the selected one (which Radix
+       marks data-state=active) in the accent colour and bold with a thicker underline, an optional .tab-count.
+     - the segmented strip (.tab-strip-filter, TabStrip variant="filter") ONLY for filter-level tabs - tabs that narrow the data shown below: equal segments in one bordered, rounded frame,
+       divided by hairlines, the selected one filled with the primary gradient. */
+  .tab-strip {
+    @apply flex max-w-full overflow-x-auto shadow-[inset_0_calc(var(--tab-line-w)*-1)_0_0_var(--tab-line-color)];
+  }
+  /* The gap to the content below belongs to the navigation strip, because the Radix root (display: contents) swallows a parent's space-y / gap: no call site spaces it
+     itself. A strip with nothing under it (a library specimen) or one in a row with a toolbar (Tabs) passes mb-0 and spaces that instead. */
+  .tab-strip:not(.tab-strip-filter) {
+    @apply mb-[var(--tab-strip-gap)];
+  }
+  .tab {
+    @apply flex shrink-0 items-center gap-2 border-b-[length:var(--tab-active-w)] px-4 py-3 text-[length:var(--fs-body)] whitespace-nowrap transition-colors focus:outline-none border-transparent text-fg hover:text-[var(--accent-text)];
+  }
+  /* The focus ring of a tab shows for a keyboard (or programmatic) focus, not after a mouse click: a selected tab must not wear a ring just because it was clicked (lib/inputModality.ts). */
+  html:not([data-input='pointer']) .tab:focus-visible {
+    @apply shadow-[var(--focus-ring)];
+  }
+  .tab[data-state=active] {
+    @apply border-accent text-[var(--accent-text)] font-bold;
+  }
+  .tab-count {
+    @apply inline-flex h-6 min-w-6 items-center justify-center rounded-[var(--radius-pill)] px-1.5 text-[length:var(--fs-micro)] font-semibold bg-[var(--icon-tile-bg)] text-fg-2;
+  }
+  .tab[data-state=active] .tab-count {
+    @apply bg-accent text-accent-on;
+  }
+  /* The filter variant (TabStrip variant="filter"): the same strip and tabs drawn as a segmented frame, only as wide as its tabs and always with a little margin above and below it. */
+  .tab-strip.tab-strip-filter {
+    @apply my-2 w-fit rounded-[var(--radius-md)] border border-[var(--field-card-border)] bg-bg shadow-none;
+  }
+  .tab-strip-filter .tab {
+    @apply min-w-fit flex-1 justify-center border-b-0 border-l border-[var(--field-card-border)] text-center font-medium text-fg-2 hover:text-fg;
+  }
+  html:not([data-input='pointer']) .tab-strip-filter .tab:focus-visible {
+    @apply shadow-[inset_0_0_0_2px_var(--focus-outline)];
+  }
+  .tab-strip-filter .tab:first-child {
+    @apply border-l-0;
+  }
+  .tab-strip-filter .tab[data-state=active] {
+    @apply border-transparent bg-[image:var(--accent-gradient)] font-semibold text-accent-on hover:text-accent-on;
+  }
+  .tab-strip-filter .tab[data-state=active] .tab-count {
+    @apply bg-accent-on text-accent;
+  }
+
+  /* The toggle (.toggle-group, its .toggle-option buttons, the chosen one .toggle-option-active): mutually exclusive values of one field - equal segments in one
+     bordered, rounded frame, divided by hairlines, the chosen segment filled edge to edge. */
+  .toggle-group {
+    @apply flex w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--field-card-border)] bg-bg;
+  }
+  .toggle-option {
+    @apply flex flex-1 items-center justify-center border-l border-[var(--field-card-border)] px-2 py-3 text-center text-[length:var(--fs-body)] font-medium whitespace-nowrap text-fg-2 transition-colors hover:text-fg focus:outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--focus-outline)];
+  }
+  .toggle-option:first-child {
+    @apply border-l-0;
+  }
+  .toggle-option.toggle-option-active {
+    @apply border-transparent bg-[image:var(--accent-gradient)] font-semibold text-accent-on hover:text-accent-on;
+  }
+
+  /* ------------------------------------------------------------ Form controls */
+  /* A text field (Input, Textarea, SearchField): the shape and text; then ONE border state - .form-control-default, -filled, -error or -readonly. The
+     focus and disabled looks are in the base. Hover borders apply to default and filled only. */
+  /* The pieces a bordered field shares with the other field-like controls (Select, QID and price inputs): .field-box the shape, .field-text the type,
+     .field-focus the focus look, .field-hover the hover border. .form-control is all of them plus the padding and disabled look. */
+  .form-control {
+    @apply rounded-[var(--field-radius)] border focus:outline-none;
+  }
+  .form-control {
+    @apply text-[length:var(--fs-body)] text-[var(--color-field-text-filled)];
+  }
+  .form-control {
+    @apply px-3 py-2 disabled:border-[var(--field-border-disabled)] disabled:text-[var(--field-label-disabled)] disabled:bg-[var(--field-bg-disabled)];
+  }
+  .form-control:not(.form-control-readonly) {
+    @apply focus-visible:border-[var(--field-focus-border)]! focus-visible:bg-[var(--field-focus-bg)] focus-visible:shadow-[var(--field-focus-ring)];
+  }
+  .field-hover,
+.form-control-default,
+.form-control-filled {
+    @apply enabled:hover:border-[var(--field-hover-border)];
+  }
+  .form-control-default {
+    @apply bg-bg border-[var(--field-border)];
+  }
+  .form-control-filled {
+    @apply bg-bg border-[var(--field-border-filled)];
+  }
+  .select-field {
+    @apply rounded-[var(--field-radius)] border focus:outline-none w-full truncate pl-3 pr-9 py-2 text-[length:var(--fs-body)] text-left disabled:cursor-not-allowed disabled:placeholder:text-[var(--field-label-disabled)] disabled:text-[var(--field-label-disabled)];
+  }
+  .select-panel {
+    @apply absolute z-[var(--z-popover)] left-0 right-0 border shadow-raised overflow-hidden;
+  }
+  .form-control-error {
+    @apply bg-bg border-[var(--field-border-error)];
+  }
+  /* Registry data the agent reads but does not edit: the recessed fill, no hover, no focus look, not selectable. */
+  .field-readonly-fill,
+.form-control-readonly {
+    @apply bg-surface cursor-default;
+  }
+  .form-control-readonly {
+    @apply select-none border-[var(--field-border)];
+  }
+  /* The search box: full width, room for the icon at the left and the clear button at the right. */
+  .form-control-search {
+    @apply w-full pr-10 min-h-[var(--control-h-md)] placeholder:text-muted disabled:cursor-not-allowed disabled:placeholder:text-[var(--field-label-disabled)];
+  }
+  /* One height for every single-line text field and dropdown, set here and nowhere else (--field-height, which follows the device's control scale).
+     !important so a call site's own height or vertical padding cannot make one field taller than its neighbour; a field that needs another size
+     is the wrong component. A Textarea is multi-line and keeps its rows. */
+  .form-control:not(textarea),
+.select-field,
+.field-wrap {
+    height: var(--field-height) !important;
+    min-height: var(--field-height) !important;
+  }
+  input.form-control,
+.select-field {
+    padding-block: 0 !important;
+  }
+  /* The tick box and the round radio: the fill and border from the tokens. The radio is a native input (appearance-none) with its mark drawn by the
+     sibling .radio-mark (the input also carries `peer`); the checkbox is the Radix <button role="checkbox"> of components/ui/checkbox.tsx, whose
+     tick is its own indicator - the `checked:` variants below are the native-input fallback and match nothing on the button. */
+  .checkbox {
+    @apply appearance-none m-0 w-[var(--size-choice-box)] h-[var(--size-choice-box)] rounded-[var(--radius-checkbox)] border border-[var(--field-border)] bg-bg cursor-pointer checked:bg-[var(--field-checkbox-selected)] checked:border-[var(--field-checkbox-selected)] disabled:cursor-not-allowed disabled:border-[var(--field-border-disabled)] disabled:bg-[var(--field-bg-disabled)] focus:outline-none focus-visible:border-[var(--field-focus-border)]! focus-visible:shadow-[var(--field-focus-ring)];
+  }
+  /* The Radix checkbox's checked and invalid states (a <button role="checkbox">: its state is in data-state / aria-invalid, not :checked). */
+  .checkbox[role='checkbox'] {
+    @apply inline-flex items-center justify-center text-on-dark data-[state=checked]:bg-[var(--field-checkbox-selected)] data-[state=checked]:border-[var(--field-checkbox-selected)] aria-invalid:border-[var(--field-border-error)];
+  }
+  /* The on/off switch (ui/switch.tsx, a Radix <button role="switch">): a pill track with a round thumb; teal (the brand link colour) when on, the field border grey when off. */
+  .switch {
+    @apply relative inline-flex shrink-0 cursor-pointer items-center rounded-[var(--radius-pill)] bg-[var(--field-border)] transition-colors focus:outline-none focus-visible:shadow-[var(--field-focus-ring)] disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[var(--link)];
+    width: var(--size-switch-w);
+    height: var(--size-switch-h);
+  }
+  .switch-thumb {
+    @apply pointer-events-none block rounded-[var(--radius-pill)] bg-[var(--on-dark)] transition-transform;
+    width: var(--size-switch-thumb);
+    height: var(--size-switch-thumb);
+    transform: translateX(var(--size-switch-inset));
+  }
+  .switch[data-state=checked] .switch-thumb {
+    transform: translateX(calc(var(--size-switch-w) - var(--size-switch-thumb) - var(--size-switch-inset)));
+  }
+  .radio {
+    @apply appearance-none m-0 w-[var(--size-choice-box)] h-[var(--size-choice-box)] rounded-[var(--radius-pill)] border border-[var(--field-border)] bg-bg cursor-pointer checked:bg-[var(--field-radio-selected)] checked:border-[var(--field-radio-selected)] disabled:cursor-not-allowed disabled:border-[var(--field-border-disabled)] disabled:bg-[var(--field-bg-disabled)] focus:outline-none focus-visible:border-[var(--field-focus-border)]! focus-visible:shadow-[var(--field-focus-ring)];
+  }
+  .radio-mark {
+    @apply pointer-events-none absolute inset-0 m-auto w-[var(--size-radio-mark)] h-[var(--size-radio-mark)] rounded-[var(--radius-pill)] bg-accent-on opacity-0 peer-checked:opacity-100 peer-disabled:bg-[var(--field-label-disabled)];
+  }
+
+  /* -------------------------------------------------------- Modals & drawers */
+  /* The dimmed layer behind a modal or drawer; .scrim-center also centres the modal in it. */
+  .scrim {
+    @apply fixed inset-0 z-[var(--z-overlay)] bg-[var(--black-80)];
+  }
+  .scrim-center {
+    @apply flex items-center justify-center cursor-default;
+  }
+  .modal-dialog {
+    @apply w-full max-h-[90vh] overflow-y-auto rounded-[var(--radius-card)] bg-bg shadow-raised p-6;
+  }
+  /* The modal layout (every Modal): header, body and footer each on their own padding, set off by rules; only the body scrolls. */
+  .modal-dialog-sectioned {
+    @apply flex flex-col overflow-hidden p-0;
+  }
+  .modal-header {
+    @apply flex items-center gap-4 border-b border-border-soft px-6 py-5;
+  }
+  /* The dialog's icon tile: the same fill and icon colour as every icon tile in the app (--icon-tile-bg, --icon-tile-fg), as on the ID Type cards. */
+  .modal-icon {
+    @apply flex size-12 shrink-0 items-center justify-center rounded-[var(--radius-card)] bg-[var(--icon-tile-bg)] text-[var(--icon-tile-fg)];
+  }
+  .modal-body {
+    @apply min-h-0 flex-1 overflow-y-auto px-6 py-5;
+  }
+  .modal-footer {
+    @apply border-t border-border-soft px-6 py-3;
+  }
+  /* Inside the sectioned modal a field's label reads as a heading: semibold. */
+  .modal-dialog-sectioned [data-slot='label'] {
+    @apply font-semibold;
+  }
+  .drawer-panel {
+    @apply fixed right-0 inset-y-0 z-[var(--z-overlay)] w-[50vw] min-w-[var(--size-drawer-min-w)] max-w-full flex flex-col bg-bg border-l border-border-soft shadow-raised transform transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)];
+  }
+  /* The row colours shared by every level: the current page, and the group that holds it. */
+  .nav-active {
+    @apply bg-[var(--nav-active-bg)] bg-[image:var(--nav-active-image)] text-[var(--nav-active-fg)];
+  }
+  /* Nav-coloured idle text with a hover fill; .nav-ghost adds the colour transition. */
+  .nav-ghost {
+    @apply transition-colors duration-[var(--motion-base)];
+  }
+  .icon-tile {
+    @apply flex shrink-0 items-center justify-center;
+  }
+  .split {
+    @apply flex flex-wrap items-center justify-between gap-3;
+  }
+  .split-nowrap {
+    @apply flex items-center justify-between gap-3;
+  }
+  .cluster {
+    @apply flex flex-wrap items-center gap-3;
+  }
+  .row {
+    @apply flex items-center gap-3;
+  }
+  .row-rule {
+    @apply border-b border-border-soft last:border-0;
+  }
+  .nav-ghost {
+    @apply text-[var(--nav-fg-muted)] transition-colors duration-[var(--motion-base)] hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-fg)];
+  }
+  .notice-danger {
+    @apply rounded-[var(--radius-card)] border border-danger bg-tone-danger-soft;
+  }
+  /* Tinted icon fill: .icon-tint is just the colours; .icon-tile-soft the square-cornered tile, .empty-icon the round empty-state version. */
+  .empty-icon {
+    @apply bg-[var(--icon-tile-bg)] text-[var(--icon-tile-fg)];
+  }
+  .empty-icon {
+    @apply flex items-center justify-center;
+  }
+  .empty-icon {
+    @apply rounded-[var(--radius-pill)];
+  }
+  .card-footer {
+    @apply flex items-center justify-between px-5 py-3 border-t border-border-soft text-[length:var(--fs-caption)] text-muted;
+  }
+  .drawer-footer {
+    @apply grid grid-flow-col auto-cols-fr gap-4 px-6 py-4 border-t border-border-soft shrink-0;
+  }
+  .button-group {
+    @apply inline-flex max-w-full items-stretch overflow-x-auto rounded-[var(--radius-button)] border border-[var(--field-card-border)] bg-bg divide-x divide-[var(--field-card-border)];
+  }
+  .chip {
+    @apply rounded-[var(--radius-pill)] bg-surface px-2.5 py-0.5;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 text-[length:var(--fs-caption)];
+  }
+  .marker-chip {
+    @apply inline-flex items-center justify-center bg-surface border border-border-soft text-[0.5rem] font-semibold leading-none text-fg-2;
+  }
+  .link-inline {
+    @apply inline-flex items-center gap-1 rounded-[var(--radius-button)] text-link hover:underline focus:outline-none focus-visible:shadow-[var(--focus-ring)] text-[length:var(--fs-caption)] font-medium;
+  }
+  /* A red text link: underline on hover. Add .focus-ring for a keyboard ring, font-medium for weight. */
+  .link {
+    @apply text-link hover:underline;
+  }
+  .tab-vertical-item {
+    @apply block w-full text-left px-4 py-2.5 text-[length:var(--fs-body)] border-l-2 transition-colors;
+  }
+  /* The text beside a field: .input-addon is the filled prefix, .input-suffix the plain suffix. */
+  .input-addon,
+.input-suffix {
+    @apply flex items-center gap-2 shrink-0 select-none;
+  }
+  .input-suffix {
+    @apply pr-3 pl-2;
+  }
+  .input-addon {
+    @apply self-stretch rounded-l-[calc(var(--field-radius)-1px)] bg-[var(--surface)] pl-3 pr-2 text-[length:var(--fs-body)] text-fg-2;
+  }
+  .input-bare {
+    @apply flex-1 min-w-0 bg-transparent text-[length:var(--fs-body)] text-[var(--color-field-text-filled)] placeholder:text-muted focus:outline-none focus-visible:shadow-none disabled:text-[var(--field-label-disabled)] disabled:placeholder:text-[var(--field-label-disabled)];
+  }
+  .field-fill {
+    @apply bg-bg;
+  }
+  .field-fill-disabled {
+    @apply bg-[var(--field-bg-disabled)];
+  }
+  /* The focus-within look of a wrapper around a field: .field-focus-within bare, .input-shell the full input shell. */
+  .field-focus-within {
+    @apply focus-within:border-[var(--field-focus-border)]! focus-within:bg-[var(--field-focus-bg)] focus-within:shadow-[var(--field-focus-ring)];
+  }
+  .rail-start {
+    @apply shrink-0 bg-bg max-lg:self-stretch lg:flex lg:flex-col lg:self-start lg:sticky lg:top-0 lg:my-8 lg:ml-8 lg:max-h-[var(--size-rail-max-h)] lg:overflow-hidden lg:rounded-[var(--radius-card)] lg:border lg:border-[var(--field-card-border)] lg:transition-[width] lg:duration-[var(--motion-slow)] lg:ease-[var(--ease-standard)] motion-reduce:transition-none;
+  }
+  .text-secondary {
+    @apply text-fg-2 text-[length:var(--fs-body)];
+  }
+  /* Floating panel under a control: layering and scroll (.popover), then the field-like surface (.popover-surface). .dropdown-popover is both,
+     stretched to the control width, for suggestion lists. */
+  .popover {
+    @apply absolute z-[var(--z-popover)] top-full overflow-y-auto shadow-raised;
+  }
+  .actions-end {
+    @apply flex gap-2 justify-end;
+  }
+  .fields {
+    @apply grid grid-cols-1 gap-4;
+  }
+  /* The heading style: bold, body colour (.title-inherit keeps the surrounding colour). The size is a .title-* modifier; font-semibold on top makes a subtitle. */
+  .title {
+    @apply font-bold;
+  }
+  .title {
+    @apply text-fg;
+  }
+  .title-sm {
+    @apply text-[length:var(--fs-body)];
+  }
+  .title-md {
+    @apply text-[length:var(--fs-body-lg)];
+  }
+  .title-lg {
+    @apply text-[length:var(--fs-h5)];
+  }
+  .title-xl {
+    @apply text-[length:var(--fs-h4)];
+  }
+  .body-text {
+    @apply text-[length:var(--fs-body)] text-fg;
+  }
+  .caption-muted {
+    @apply text-[length:var(--fs-caption)] text-muted;
+  }
+  .caption-secondary {
+    @apply text-[length:var(--fs-caption)] text-fg-2;
+  }
+  .icon-sm {
+    @apply h-4 w-4 shrink-0;
+  }
+  .empty-line {
+    @apply py-6 text-center text-muted;
+  }
+  .pill {
+    @apply rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--fs-caption)];
+  }
+  .row-between {
+    @apply flex items-center justify-between;
+  }
+  .dot {
+    @apply h-2 w-2 rounded-[var(--radius-pill)];
+  }
+  .cell-body {
+    @apply px-4 py-3 text-[length:var(--fs-body)];
+  }
+  .icon-xs {
+    @apply h-3.5 w-3.5 shrink-0;
+  }
+  /* A bordered table cell: .table-cell for data, .grid-cell-head bold for a header. */
+  .table-cell {
+    @apply border border-border-soft px-3 py-2;
+  }
+  .table-cell {
+    @apply align-top;
+  }
+  .link-on-dark {
+    @apply text-on-dark underline underline-offset-4 hover:opacity-80;
+  }
+  .field-clear-btn {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-fg;
+  }
+  .stack {
+    @apply flex flex-col gap-3;
+  }
+  .split-pane {
+    @apply flex flex-col lg:flex-row items-start gap-6;
+  }
+  /* A full-width left-aligned table: .data-table as is (separate borders), .data-grid with collapsed borders. */
+  .data-table {
+    @apply w-full text-left text-[length:var(--fs-body)];
+  }
+  .centered-stack {
+    @apply flex flex-col items-center text-center;
+  }
+  /* A field's label (the shadcn/ui Label): the label size and body colour of the app's Input, the grey of a disabled field's label beside a disabled control. */
+  .field-label {
+    @apply flex items-center gap-2 text-[length:var(--fs-label)] text-fg select-none peer-disabled:cursor-not-allowed peer-disabled:text-[var(--field-label-disabled)];
+  }
+  .link-truncate {
+    @apply text-link hover:underline font-medium block max-w-xs truncate;
+  }
+  .muted-body {
+    @apply text-muted text-[length:var(--fs-body)];
+  }
+  .tabs-layout {
+    @apply flex flex-col lg:flex-row items-stretch;
+  }
+  .tabs-panel {
+    @apply @container flex-1 min-w-0 w-full p-8;
+  }
+  .tabs-nav-card {
+    @apply w-full md:w-56 shrink-0 overflow-hidden;
+  }
+  .tabs-aside {
+    @apply min-w-0 flex-1 basis-[30%] justify-end;
+  }
+  .rail-toggle {
+    @apply hidden lg:flex w-full shrink-0 border-b border-border-soft text-[var(--nav-fg-muted)] transition-colors duration-[var(--motion-base)] hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-fg)] focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  .tabs-scroll {
+    @apply flex lg:block min-h-0 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto;
+  }
+  .tab-label-compact {
+    @apply lg:hidden whitespace-nowrap text-[length:var(--fs-body)] font-semibold;
+  }
+  .tab-label-wide {
+    @apply hidden lg:inline min-w-0 truncate text-[length:var(--fs-body)];
+  }
+  .signature-canvas {
+    @apply rounded-[var(--radius-card)] border border-[var(--grey-form)] bg-[var(--paper)] touch-none w-full max-w-[var(--size-signature-max-w)];
+  }
+  .select-inline-trigger {
+    @apply text-fg-2 focus:outline-none focus-visible:underline;
+  }
+  .phone-popover {
+    @apply absolute z-[var(--z-popover)] top-full overflow-y-auto shadow-raised -left-px -right-px mt-2 max-h-64 rounded-[var(--field-radius)] border border-border-soft bg-bg py-1;
+  }
+  .drawer-header {
+    @apply flex items-center justify-between px-6 pt-5 pb-3 shrink-0;
+  }
+  .card-art-layer {
+    @apply pointer-events-none absolute inset-0 z-[var(--z-below)] overflow-hidden rounded-[inherit];
+  }
+  .card-art-mark {
+    @apply absolute -bottom-10 -right-6 size-40;
+  }
+  .sort-button {
+    @apply inline-flex min-h-6 items-center gap-1.5 hover:text-fg;
+  }
+  .table-footer {
+    @apply flex items-center justify-between gap-3 border-t border-[var(--table-border)] px-4 py-2;
+  }
+  .vrule {
+    @apply w-px shrink-0;
+  }
+  .spinner-conic {
+    @apply inline-block shrink-0 rounded-[var(--radius-pill)] motion-safe:animate-spin bg-[conic-gradient(from_0deg,transparent_0deg,var(--accent)_300deg,var(--accent))] motion-reduce:bg-[conic-gradient(var(--accent),var(--accent))] [mask:radial-gradient(farthest-side,transparent_calc(100%-2px),#000_calc(100%-2px))];
+  }
+  /* A centred choice tile: .choice-tile plain, .choice-option adds the card-option transition and focus ring. */
+  .choice-option {
+    @apply relative flex flex-col items-center gap-2 rounded-[var(--radius-card)] border p-4;
+  }
+  .choice-option {
+    @apply transition-colors focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  .action-bar {
+    @apply fixed inset-x-0 z-[var(--z-sticky-raised)] border-t border-border-soft bg-bg shadow-raised;
+  }
+  .table-frame {
+    @apply rounded-[var(--radius-card)] border border-[var(--table-border)] bg-bg overflow-hidden;
+  }
+  .select-dark-trigger {
+    @apply border-on-dark-line-2 bg-on-dark-fill-1 text-on-dark focus-visible:border-accent;
+  }
+  .select-light-trigger {
+    @apply bg-bg text-[var(--color-field-text-filled)] focus-visible:border-[var(--field-focus-border)]! focus-visible:bg-[var(--field-focus-bg)] focus-visible:shadow-[var(--field-focus-ring)] disabled:border-[var(--field-border-disabled)] disabled:bg-[var(--field-bg-disabled)];
+  }
+  .select-panel-dark {
+    @apply border-on-dark-line-2 bg-[var(--charcoal-panel)] divide-y divide-on-dark-line-1;
+  }
+  .select-panel-tinted {
+    @apply border-[var(--field-card-border)] bg-surface divide-y divide-[var(--field-divider)];
+  }
+  .select-panel-light {
+    @apply border-border-soft bg-bg divide-y divide-[var(--field-divider)];
+  }
+  .pager-button {
+    @apply flex h-9 min-w-9 shrink-0 items-center justify-center gap-1.5 px-3 text-[length:var(--fs-body)] focus:outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--focus-outline)] transition-colors;
+  }
+  .pager-cell {
+    @apply text-fg hover:bg-[var(--icon-tile-bg)] disabled:text-muted disabled:hover:bg-transparent;
+  }
+  .pager-current {
+    @apply bg-[image:var(--accent-gradient)] text-accent-on font-bold hover:bg-[image:var(--accent-gradient-hover)];
+  }
+  .choice-tone-success {
+    @apply border-[var(--success-solid)] bg-[var(--tone-success-bg)] shadow-[inset_0_0_0_1px_var(--success-solid)] text-[var(--success-solid)];
+  }
+  .choice-tone-warn {
+    @apply border-[var(--warn)] bg-[var(--tone-warn-bg)] shadow-[inset_0_0_0_1px_var(--warn)] text-[var(--warn-text)];
+  }
+  .choice-tone-danger {
+    @apply border-[var(--danger-solid)] bg-[var(--tone-danger-bg)] shadow-[inset_0_0_0_1px_var(--danger-solid)] text-[var(--danger-solid)];
+  }
+  .choice-tone-neutral {
+    @apply border-[var(--muted)] bg-[var(--surface)] shadow-[inset_0_0_0_1px_var(--muted)] text-[var(--fg-2)];
+  }
+  .sticky-head {
+    @apply sticky top-0 z-[var(--z-sticky)];
+  }
+  .table-head-row {
+    @apply bg-[var(--table-header-bg)] text-fg-2;
+  }
+  .table-th {
+    @apply px-4 py-3 font-semibold text-[length:var(--fs-caption-upper)];
+  }
+  .table-th-plain {
+    @apply whitespace-nowrap border-b border-[var(--border)];
+  }
+  .table-rule-top {
+    @apply border-t border-[var(--table-border)];
+  }
+  .row-clickable {
+    @apply cursor-pointer hover:bg-surface;
+  }
+  .table-row-selected {
+    @apply bg-tone-accent-soft [&>td:first-child]:shadow-[inset_var(--selected-row-bar)_0_0_var(--accent)];
+  }
+  .table-td {
+    @apply px-4 text-fg;
+  }
+  .cell-numeric {
+    @apply text-right whitespace-nowrap tabular-nums;
+  }
+  .cell-clip {
+    @apply block max-w-xs truncate;
+  }
+  .empty-state-compact {
+    @apply gap-2 px-4 py-6;
+  }
+  .empty-state-roomy {
+    @apply gap-3 px-6 py-12;
+  }
+  .tab-vertical-active {
+    @apply border-accent text-[var(--accent-text)] font-medium bg-surface;
+  }
+  .tab-vertical-idle {
+    @apply border-transparent text-fg-2 hover:text-fg hover:bg-surface;
+  }
+  .rail-toggle-wide {
+    @apply justify-end px-5;
+  }
+  .rail-item-narrow {
+    @apply w-12;
+  }
+  .rail-item {
+    @apply lg:w-full transition-colors duration-[var(--motion-base)] focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  .rail-item-compact {
+    @apply max-lg:w-auto max-lg:gap-2 max-lg:px-3;
+  }
+  .rail-item-wide {
+    @apply lg:px-5 lg:gap-3;
+  }
+  /* A selectable card's icon tile: the unselected-card glyph (one fill and one icon colour, from the tile tokens) - a card adds .glyph-chosen when it is selected, nothing else. */
+  .option-glyph {
+    @apply inline-flex p-2 rounded-[var(--radius-card)] bg-[var(--icon-tile-bg)] text-[var(--icon-tile-fg)];
+  }
+  /* The 40px rounded icon box of an option row; the fill (surface, accent) is added where it is used. */
+  /* A card's icon tile. The colours are the unselected-card glyph: one fill and one icon colour for EVERY selectable card (.glyph-chosen is the selected one). */
+  .icon-box {
+    @apply flex shrink-0 items-center justify-center h-10 w-10 rounded-[var(--radius-button)] transition-colors bg-[var(--icon-tile-bg)] text-[var(--icon-tile-fg)];
+  }
+  .glyph-chosen {
+    @apply bg-[image:var(--accent-gradient)] text-accent-on;
+  }
+  .field-icon-lead {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none;
+  }
+  .select-panel-up {
+    @apply bottom-full rounded-t-[var(--field-radius)] rounded-b-none border-b-0;
+  }
+  .select-panel-down {
+    @apply top-full rounded-b-[var(--field-radius)] rounded-t-none border-t-0;
+  }
+  .pick-row-compact {
+    @apply px-3 py-2 cursor-pointer;
+  }
+  .field-wrap {
+    @apply relative flex items-center min-h-[var(--control-h-md)] rounded-[var(--field-radius)] border;
+  }
+  /* The focus ring of a wrapped field is drawn ABOVE its contents. As an inset shadow on the wrapper it was painted under the filled prefix (.input-addon), so the
+     left edge showed the 1px border while the other three edges showed border plus ring. The overlay keeps all four edges the same thickness. */
+  .field-wrap.field-focus-within:focus-within {
+    @apply shadow-none;
+  }
+  .field-wrap:focus-within::after {
+    @apply pointer-events-none absolute inset-0 rounded-[inherit] shadow-[var(--field-focus-ring)] content-[''];
+  }
+  .rail-row {
+    @apply h-12 flex items-center;
+  }
+
+  /* The open/close chevron over a Select: a 24px target (WCAG 2.5.8) with the 16px icon centred where it always sat. */
+  .select-chevron-btn {
+    @apply absolute right-2 top-1/2 -translate-y-1/2 size-6 flex items-center justify-center disabled:cursor-not-allowed;
+  }
+  .date-panel {
+    @apply absolute right-0 top-full z-[var(--z-popover)] mt-1 w-80 max-w-[90vw] rounded-[var(--radius-card)] border border-border-soft bg-bg p-3 shadow-raised;
+  }
+  /* Opened above the field (no room below it): see popoverPlacement. */
+  .date-panel-above {
+    @apply top-auto bottom-full mt-0 mb-1;
+  }
+  .date-grid {
+    @apply grid grid-cols-7 gap-1;
+  }
+  .date-weekday {
+    @apply py-1 text-center text-[length:var(--fs-caption)] text-muted;
+  }
+  .date-day {
+    @apply h-9 rounded-[var(--radius-sm)] text-center text-[length:var(--fs-caption)] text-fg transition-colors hover:bg-[var(--field-card-hover-bg)] focus:outline-none focus-visible:shadow-[var(--focus-ring)] disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .date-day-outside {
+    @apply text-muted-2;
+  }
+  .date-day-today {
+    @apply border border-[var(--field-card-selected)];
+  }
+  .date-day-chosen {
+    @apply bg-[var(--field-card-selected)] text-on-dark hover:bg-[var(--field-card-selected)];
+  }
+}
+
+/* Text, layout and card helpers the design-system stories (and the applications) use; kept with the design system so Storybook renders them. */
+@layer components {
+  /* Larger corner radius (dashboard tiles and rows). */
+  .card-lg {
+    border-radius: var(--radius-card-lg);
+  }
+  /* A card that is a link or button: on hover the fill turns pale teal and the border takes the form fields' focus border colour. */
+  .card-interactive {
+    @apply hover:bg-[var(--field-card-hover-bg)] hover:border-[var(--field-focus-border)];
+  }
+  .card-button {
+    @apply text-left p-4 hover:bg-[var(--field-card-hover-bg)] hover:border-[var(--field-focus-border)] transition-colors;
+  }
+  .card-option {
+    @apply rounded-[var(--radius-card)] border transition-colors focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  .card-option-lg {
+    @apply rounded-[var(--radius-card-lg)] border transition-colors focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  /* A full-width left-aligned card button body. */
+  .card-block {
+    @apply w-full text-left p-4;
+  }
+  /* Small uppercase section heading (spacing such as mb-2 stays at the call site). */
+  .caption-heading {
+    @apply text-[length:var(--fs-caption-upper)] uppercase tracking-wide font-semibold text-fg;
+  }
+  .eyebrow {
+    @apply text-[length:var(--fs-caption-upper)] tracking-wide uppercase text-muted;
+  }
+  .value-text {
+    @apply font-medium text-[length:var(--fs-body)] text-fg;
+  }
+  /* A medium-weight value line that wraps. */
+  .value-text-lg {
+    @apply font-medium text-fg text-[length:var(--fs-body-lg)];
+  }
+  /* Inline text-link button. */
+  .link-action {
+    @apply text-[length:var(--fs-caption)] text-link underline hover:opacity-80 focus:outline-none focus-visible:shadow-[var(--focus-ring)] rounded-[var(--radius-button)] px-0.5;
+  }
+  .code-chip {
+    @apply block break-all rounded-[var(--radius-button)] bg-surface-warm px-2 py-1 text-[length:var(--fs-caption)] text-fg;
+  }
+  .stack-center {
+    @apply flex flex-col items-center;
+  }
+  .grid-2-up {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+  .grid-2-up-sm {
+    @apply grid gap-3 sm:grid-cols-2;
+  }
+  .icon-md {
+    @apply h-5 w-5 shrink-0;
+  }
+  .pad-panel {
+    @apply px-5 py-4;
+  }
+  .pad-row {
+    @apply px-4 py-3;
+  }
+  .pad-card-lg {
+    @apply px-6 py-5;
+  }
+}

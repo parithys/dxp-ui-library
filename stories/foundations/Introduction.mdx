@@ -1,0 +1,50 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# @vfq/dxp-ui - Vodafone Qatar DXP design system
+
+This Storybook is the catalogue of the **DXP UI library**: the design tokens, the shadcn/ui base components and the field and display primitives that the
+Vodafone Qatar DXP applications are built from. Every story imports the component from the library's own `src/` and renders it with the library's own CSS
+(`src/styles`), exactly as a consuming application loads it (`@vfq/dxp-ui/preset.css`, `components.css`, `tooltip.css`). Nothing is a copy, and nothing restyles a component.
+
+Application-specific patterns, capabilities and business components are **not** here: they live in the prototype application's own Storybook, which imports this package.
+
+## Single source of truth
+
+- A story **imports** the production component. It never re-implements one.
+- There is **no Storybook-only CSS**. Look comes from the tokens (`src/styles/tokens.css`) and the semantic classes (`src/styles/components.css`); layout around specimens uses the library's own layout classes.
+- Token pages (Colors, Typography, Spacing, Radius) **read the stylesheet at runtime**, so they cannot drift from the library.
+- If a component cannot be rendered in isolation, or fails an accessibility rule, the story says so under *Restrictions*; the component is fixed in `src/`, never patched for Storybook.
+
+## Categories
+
+1. **Foundations** - colours, typography, spacing and sizing, radius / borders / shadows, icons, brand marks, layout vocabulary, themes and device, accessibility, and the Primitives Map.
+2. **Primitives** - buttons, badges, cards, spinners, tooltips, tables and other building blocks.
+3. **Forms** - inputs, selects, date and phone fields, choice controls, validation.
+4. **Navigation** - tabs, dropdown menu, pagination.
+5. **Feedback & Status** - banners, empty states, status slot, modals, dialogs and drawers.
+
+## Toolbar: Theme and Device
+
+- **Theme** (Light / Dark) toggles the `dark` class on `<html>`; `tokens.css` redefines the structural tokens under `:root.dark`.
+- **Device** (Web / Tablet) sets `data-device="tablet"`: the control heights grow (see *Foundations / Themes and Device*).
+
+## Accessibility
+
+The a11y addon runs on every story (the **Accessibility** panel). Every interactive story also carries a `play` function that exercises the keyboard and ARIA behaviour.
+
+## Running it
+
+```bash
+npm run storybook          # dev server (port from SB_PORT, default 6006)
+npm run build-storybook    # static build into storybook-static/
+npm run typecheck          # type-checks src and the stories
+npm test                   # includes the Storybook coverage guards (tests/storybook*.test.mjs)
+```
+
+## Adding a story
+
+Create `stories/<category>/<Name>.stories.tsx` (CSF3), import the component from `../../src`, add `docsParameters({...})` from `stories/_shared/docs.ts`,
+one story per real variant and state, and a `play` function for interactive behaviour. The meta must carry a `component` (the default `tags: ['autodocs']`
+in `.storybook/preview.tsx` then generates its docs page). Use the library's classes and tokens only, no literal colours. See `stories/CONVENTIONS.md`.

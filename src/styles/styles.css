@@ -1,0 +1,6 @@
+/* The compiled stylesheet entry (dist/styles.css): Tailwind, the preset, the component classes and the tooltip pack. */
+@import "tailwindcss" source("../");
+@import "./preset.css";
+@import "./components.css";
+@import "../components/primitives/tooltip-tokens.css";
+@import "../components/primitives/tooltip.css";

@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  // Storybook is a separate tool chain (npm run storybook): its config and stories are not part of the application's lint run.
+  "ignorePatterns": ["storybook-static/**", "dist/**"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    // Every native <button> declares its type (a bare one submits a form): the same rule tests/ui.test.mjs guards by source scan.
+    "react/button-has-type": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  },
+  "overrides": [
+    {
+      // Storybook stories and config: a story's `render: () => { useState(...) }` is a component to Storybook (it is called as one), and the story helpers
+      // export constants beside components - neither rule applies to a catalogue.
+      "files": ["stories/**", ".storybook/**"],
+      "rules": { "react/rules-of-hooks": "off", "react/only-export-components": "off", "react/set-state-in-effect": "off" }
+    },
+    {
+      // Next.js route files must export `metadata`, `viewport`, `dynamicParams` and `generateStaticParams` beside the page component; the shadcn/ui
+      // components export their `cva` variant helpers (buttonVariants ...) beside the component, as generated.
+      "files": ["app/**", "src/components/ui/**"],
+      "rules": { "react/only-export-components": "off" }
+    }
+  ]
+}

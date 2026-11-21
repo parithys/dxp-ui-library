@@ -1,0 +1,186 @@
+{
+  "Badge.tsx": {
+    "kind": "page",
+    "story": "Primitives/Badge"
+  },
+  "ChoiceCards.tsx": {
+    "kind": "page",
+    "story": "Forms/Choice Cards"
+  },
+  "CloseButton.tsx": {
+    "kind": "page",
+    "story": "Primitives/Close Button"
+  },
+  "CountryMarker.tsx": {
+    "kind": "page",
+    "story": "Primitives/Country Marker"
+  },
+  "DataTable.tsx": {
+    "kind": "page",
+    "story": "Primitives/Data Display/Data Table"
+  },
+  "DateInput.tsx": {
+    "kind": "page",
+    "story": "Forms/Date Input"
+  },
+  "Drawer.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Drawer"
+  },
+  "EmptyState.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Empty State"
+  },
+  "ErrorBanner.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Error Banner"
+  },
+  "Icon.tsx": {
+    "kind": "page",
+    "story": "Primitives/Icon"
+  },
+  "IconButton.tsx": {
+    "kind": "page",
+    "story": "Primitives/Icon Button"
+  },
+  "Input.tsx": {
+    "kind": "page",
+    "story": "Forms/Input"
+  },
+  "Modal.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Modal"
+  },
+  "OptionToggle.tsx": {
+    "kind": "page",
+    "story": "Forms/Option Toggle"
+  },
+  "OverlayPortal.tsx": {
+    "kind": "internal",
+    "story": "Feedback & Status/Dialog (base)",
+    "note": "Mount point behind Modal and Drawer; not used on its own."
+  },
+  "Pager.tsx": {
+    "kind": "page",
+    "story": "Navigation/Pager"
+  },
+  "Pagination.tsx": {
+    "kind": "page",
+    "story": "Navigation/Pagination"
+  },
+  "PanelIcon.tsx": {
+    "kind": "page",
+    "story": "Primitives/Panel Icon"
+  },
+  "PhoneNumberInput.tsx": {
+    "kind": "page",
+    "story": "Forms/Phone Number Input"
+  },
+  "Radio.tsx": {
+    "kind": "page",
+    "story": "Forms/Radio"
+  },
+  "SearchField.tsx": {
+    "kind": "page",
+    "story": "Forms/Search Field"
+  },
+  "Select.tsx": {
+    "kind": "page",
+    "story": "Forms/Select"
+  },
+  "SignaturePad.tsx": {
+    "kind": "page",
+    "story": "Forms/Signature Pad"
+  },
+  "Spinner.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Spinner"
+  },
+  "StatusSlot.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Status Slot"
+  },
+  "Switch.tsx": {
+    "kind": "page",
+    "story": "Forms/Switch"
+  },
+  "TabLevel.tsx": {
+    "kind": "page",
+    "story": "Navigation/Tab Levels"
+  },
+  "TabStrip.tsx": {
+    "kind": "page",
+    "story": "Navigation/Tabs"
+  },
+  "Tabs.tsx": {
+    "kind": "page",
+    "story": "Navigation/Tabs"
+  },
+  "Textarea.tsx": {
+    "kind": "page",
+    "story": "Forms/Textarea"
+  },
+  "Tooltip.tsx": {
+    "kind": "page",
+    "story": "Primitives/Tooltip"
+  },
+  "TooltipContext.tsx": {
+    "kind": "page",
+    "story": "Primitives/Tooltip Group"
+  },
+  "VodafoneMark.tsx": {
+    "kind": "page",
+    "story": "Foundations/Brand"
+  },
+  "VodafoneWordmark.tsx": {
+    "kind": "page",
+    "story": "Foundations/Brand"
+  },
+  "buttonSurfaces.ts": {
+    "kind": "helper",
+    "note": "One class-name constant for the secondary button surface."
+  },
+  "cardParts.tsx": {
+    "kind": "section",
+    "story": "Primitives/Card",
+    "note": "The selected-card tick and texture and the state class names; shown on the Card page."
+  },
+  "countryDialCodes.ts": {
+    "kind": "helper",
+    "note": "Dial-code data used by PhoneNumberInput."
+  },
+  "pagerModel.ts": {
+    "kind": "helper",
+    "note": "Page-list logic behind Pager."
+  },
+  "paginationModel.ts": {
+    "kind": "helper",
+    "note": "Page-window logic behind Pagination and DataTable."
+  },
+  "phoneFormat.ts": {
+    "kind": "helper",
+    "note": "Phone number formatting and masking."
+  },
+  "statusSlotContext.ts": {
+    "kind": "helper",
+    "note": "The contexts behind StatusSlot, and the hook that says whether a slot is around."
+  },
+  "tabDepth.ts": {
+    "kind": "helper",
+    "note": "React context and hook that tell a tab strip how deeply it is nested."
+  },
+  "tooltip-tokens.css": {
+    "kind": "style",
+    "story": "Primitives/Tooltip",
+    "note": "Tooltip design tokens; styled with tooltip.css."
+  },
+  "tooltip.css": {
+    "kind": "style",
+    "story": "Primitives/Tooltip",
+    "note": "Tooltip look; imported by styles.css (and @vfq/dxp-ui/tooltip.css)."
+  },
+  "tooltipGroup.ts": {
+    "kind": "helper",
+    "note": "React context behind TooltipGroup."
+  }
+}
