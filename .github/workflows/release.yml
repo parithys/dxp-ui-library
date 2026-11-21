@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 20
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # setup-node fills NODE_AUTH_TOKEN with a placeholder when the secret is empty, so the publish step tests this flag instead.
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,7 +51,7 @@ jobs:
 
       # The scope (@vfq) is the package's name in package.json; the token is a repository secret.
       - name: Publish to the registry (only when NPM_TOKEN is set)
-        if: ${{ env.NODE_AUTH_TOKEN != '' }}
+        if: ${{ env.HAS_NPM_TOKEN == 'true' }}
         run: npm publish "${{ steps.pack.outputs.tarball }}" --access restricted
 
       # Optional: tell the application repository (set the repository variable DXP_APP_REPO = owner/prototype and the secret DXP_APP_DISPATCH_TOKEN).
