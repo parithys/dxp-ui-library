@@ -1,6 +1,6 @@
 {
   "name": "@vfq/dxp-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The DXP UI library: the Vodafone Qatar DXP design system (React + Tailwind + Radix, shadcn/ui based).",
   "license": "UNLICENSED",
   "type": "module",

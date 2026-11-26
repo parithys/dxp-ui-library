@@ -4,6 +4,8 @@ All notable changes to `@vfq/dxp-ui` are recorded here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-26
+
 ### Added
 - Components moved in from the application: `PageHeader`, `KeyInformationPanel`, `OrderConfirmationScreen`, `CheckoutSummaryTables`, `StarStat`, `OsmEmbed`, `ScanFailureNotice`, `FileImagePreview`, `RemoveDocumentDialog`, `SignatureCapture`, `CommentsField`, `ErrorBoundary`, `EntityMissing`, `CameraCaptureButton`, `DocumentCaptureActions`, `DocumentFileMeta`, and the guided-flow shell (`WizardTitleBand`, `WizardStepPanel`, `WizardStepHeader`, `WizardFooter`, `WizardDialogs`, `CustomerViewButton`, `CustomerMirrorPanel`, `StepSummarySection`, `SummaryFieldRow`, `StandaloneStepPage`).
 - Helpers: `formatMoney` / `formatMoneyAny` / `formatMoneyLoose` and the date, size and amount formatters; `documentFileStore`, `documentScan`, `documentUploadRules` (`uploadRules`, `uploadFileProblem`), `pdfFromImages`, `pdfPageCount`, `printDocument`, `values`, `stepSummary`, `wizardNavigation`, the `WizardStep` type, and the `useStepFocus` / `useDocumentScan` hooks.
