@@ -501,6 +501,29 @@
   --size-signature-max-w: 480px;
   --size-wordmark-h: 18px;
   --size-menu-min-w: 8rem;
+  /* The page title band (PageHeader, the wizard title): charcoal in the light theme, the section-header surface in dark. */
+  --title-band-bg: var(--charcoal-panel);
+  /* Info banner (e.g. MSISDN picker notice). */
+  --info-banner-bg: var(--tint-blue-bg);
+  /* How much the result cards' icon panels are softened toward the page background (the outcome colour stays readable as that hue). */
+  --alert-panel-soften: 8%;
+  --size-alert-icon-w: 4rem;
+  --size-alert-icon: 2.5rem;
+
+  --summary-milestone: #eb9700; /* accent used AS TEXT: 5.0:1 on the page background (the fill red #e60000 is 4.4:1 there) */
+  --alert-wash: var(--surface);
+
+  --size-step-header-min-h: 39px;
+  --size-step-header-pad-tray: 22rem;
+  --size-step-header-pad-action: 26rem;
+
+  --priority: var(--summary-milestone);
+  --customer-view-bg: var(--surface);
+  --customer-view-fg: #256f81;
+  /* The info callout's edge: the info text blue, softened into the page (the fill is --info-banner-bg). */
+  --info-banner-border: color-mix(in oklab, var(--tint-blue-fg), var(--bg) 75%);
+  /* Customer-view button hover. */
+  --customer-view-bg-hover: color-mix(in oklab, var(--customer-view-bg), var(--customer-view-fg) 8%);
 }
 
 /* Control heights: one scale for buttons, inputs, selects and search boxes that share a row, set once, never per screen.
@@ -637,6 +660,13 @@
   --elev-ring: 0 0 0 1px var(--border);
   /* No coloured CTA glow anywhere in the app. */
   --shadow-brand: none;
+  /* Dark mode only: the page title band takes the section-header surface (--bg), not the fixed charcoal of the light theme. */
+  --title-band-bg: var(--bg);
+  --info-banner-bg: rgba(80,140,255,.12);
+
+  --customer-view-bg: rgba(0,176,202,.16);
+  --customer-view-fg: #5fd3e6;
+  --priority: #f5c36a;
 }
 
 /* Linked-user segment badges (Business 360 and the Linked business card). Solid tints with dark text, not colour

@@ -134,7 +134,7 @@ test('guard: every hand-written <button> declares a type (so it never submits a 
 });
 
 // Data tables go through DataTable (sorting, paging, sticky header, keyboard rows, one look): no other raw <table> in the library.
-const NON_DATA_TABLES = [];
+const NON_DATA_TABLES = ['components/primitives/CheckoutSummaryTables.tsx']; // the bordered two-column summary tables: label / value rows, not a data grid
 test('guard: data tables use DataTable - a raw <table> is only for the allow-listed key-value / legal tables', () => {
   const bad = files
     .map((f) => path.relative(SRC, f))

@@ -9,7 +9,7 @@ import path from 'node:path';
 const css = fs.readFileSync('src/styles/components.css', 'utf8');
 
 // Classes the library defines for its consumers (the app composes them in its own markup); the prototype's test checks that the app uses each one.
-const CONSUMER_API = new Set(['grid-2-up', 'grid-2-up-sm', 'card-lg', 'card-option', 'stack-center', 'code-chip', 'pad-card-lg', 'icon-md', 'card-option-lg', 'value-text', 'card-block', 'caption-heading', 'pad-row', 'value-text-lg', 'link-action', 'pad-panel', 'eyebrow', 'icon-box']);
+const CONSUMER_API = new Set(['grid-2-up', 'grid-2-up-sm', 'card-lg', 'card-option', 'stack-center', 'code-chip', 'pad-card-lg', 'icon-md', 'card-option-lg', 'value-text', 'card-block', 'caption-heading', 'pad-row', 'value-text-lg', 'link-action', 'pad-panel', 'eyebrow', 'icon-box', 'tray-panel', 'narrow-panel', 'caps-strong', 'eligibility-alert-soft-stop', 'eligibility-alert-approval-routing', 'eligibility-alert-pass', 'eligibility-alert-advisory', 'eligibility-alert-pending']);
 
 // Single-class @apply blocks: `.name { @apply a b c; }` (a class defined in several blocks has the union).
 const sets = new Map();
