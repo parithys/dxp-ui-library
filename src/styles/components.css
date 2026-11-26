@@ -793,6 +793,181 @@
   .date-day-chosen {
     @apply bg-[var(--field-card-selected)] text-on-dark hover:bg-[var(--field-card-selected)];
   }
+  .split-wide {
+    @apply flex flex-wrap items-center justify-between gap-x-4 gap-y-2;
+  }
+  .divider-bottom {
+    @apply border-b border-border-soft;
+  }
+  .disc-lg {
+    @apply flex h-16 w-16 items-center justify-center rounded-[var(--radius-pill)];
+  }
+  .title-band {
+    @apply bg-[var(--title-band-bg)] text-on-dark border-b border-[var(--field-card-border)];
+  }
+  .btn-on-title-band {
+    @apply [--btn-secondary-fill:var(--icon-tile-bg)] [--btn-secondary-hover:var(--bg)];
+  }
+  .tag-warm {
+    @apply inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-surface-warm px-2.5 py-0.5 text-[var(--accent-text)] text-[length:var(--fs-tag)] font-medium;
+  }
+  .ping-ring {
+    @apply absolute inline-flex h-full w-full rounded-[var(--radius-pill)] bg-accent-on opacity-75 motion-safe:animate-ping;
+  }
+  .split-top {
+    @apply flex items-start justify-between;
+  }
+  .spread {
+    @apply flex justify-between gap-4;
+  }
+  .wrap-center {
+    @apply flex flex-wrap items-center;
+  }
+  .panel-soft,
+  .tray-panel {
+    @apply rounded-[var(--radius-card)] border border-border-soft bg-bg;
+  }
+  .tray-panel {
+    @apply flex flex-col overflow-hidden text-fg shadow-raised;
+  }
+  .caps-strong {
+    @apply font-semibold tracking-wide uppercase;
+  }
+  .title-2xl {
+    @apply text-[length:var(--fs-h3)];
+  }
+  .title-on-dark {
+    @apply text-[length:var(--fs-h4)] font-bold text-on-dark break-words min-w-0;
+  }
+  .fill-start {
+    @apply flex-1 min-w-0 text-left;
+  }
+  .auto-fit-grid {
+    @apply grid gap-6 grid-cols-[repeat(auto-fit,minmax(max(18rem,calc((100%-1.5rem)/2)),1fr))] items-start;
+  }
+  .card-frame-soft {
+    @apply rounded-[var(--radius-card)] border border-border-soft;
+  }
+  .section-toggle {
+    @apply w-full flex items-center focus:outline-none focus-visible:shadow-[var(--focus-ring)] gap-2 px-4 py-3 text-left hover:bg-surface-warm;
+  }
+  .title-band-pad {
+    @apply px-4 sm:px-8 pt-6 sm:pt-8 pb-6;
+  }
+  .table-plain {
+    @apply w-full border-collapse;
+  }
+  .table-label-cell {
+    @apply bg-surface w-2/5 text-left;
+  }
+  .stat-value {
+    @apply text-[length:var(--fs-body)] leading-tight text-fg;
+  }
+  /* The eligibility results the agent must act on, inline on the step: one card per result: a border all round and a wash in the outcome's tone - no strip on one side.
+     The layout: the icon sits in its own full-height panel flush with the card's left edge (the card clips it to its rounded corners), and the text beside it carries the padding. */
+  .eligibility-alert {
+    @apply flex items-stretch overflow-hidden rounded-[var(--radius-card)] border;
+  }
+  .eligibility-alert > :not(.eligibility-alert-icon) {
+    @apply p-5;
+  }
+  /* The result's icon panel: a column the height of the card filled in the outcome's colour, the icon centred in it in the card's own wash (so it reads as cut out of the panel). */
+  .eligibility-alert-icon {
+    @apply flex w-[var(--size-alert-icon-w)] shrink-0 items-center justify-center text-[var(--alert-wash)];
+  }
+  .eligibility-alert-icon > svg {
+    @apply size-[var(--size-alert-icon)];
+  }
+  .eligibility-alert-hard-stop .eligibility-alert-icon {
+    @apply bg-[color-mix(in_oklab,var(--danger-solid),var(--bg)_var(--alert-panel-soften))];
+  }
+  /* One hue and one icon per outcome, so each is told apart at a glance: hard stop red (cross), soft stop amber (warning triangle), approval violet (clock), advisory blue (info), pass green (tick). */
+  .eligibility-alert-soft-stop .eligibility-alert-icon {
+    @apply bg-[color-mix(in_oklab,var(--warn-solid),var(--bg)_var(--alert-panel-soften))];
+  }
+  .eligibility-alert-approval-routing .eligibility-alert-icon {
+    @apply bg-[color-mix(in_oklab,var(--info-solid),var(--bg)_var(--alert-panel-soften))];
+  }
+  .eligibility-alert-pass .eligibility-alert-icon {
+    @apply bg-[color-mix(in_oklab,var(--success-solid),var(--bg)_var(--alert-panel-soften))];
+  }
+  .eligibility-alert-advisory .eligibility-alert-icon {
+    @apply bg-[color-mix(in_oklab,var(--advisory-solid),var(--bg)_var(--alert-panel-soften))];
+  }
+  .eligibility-alert-hard-stop {
+    --alert-wash: var(--tone-danger-bg-soft);
+    @apply border-danger bg-[var(--alert-wash)];
+  }
+  .eligibility-alert-soft-stop {
+    --alert-wash: var(--tone-warn-bg-soft);
+    @apply border-[var(--warn)] bg-[var(--alert-wash)];
+  }
+  .eligibility-alert-approval-routing {
+    --alert-wash: var(--tone-info-bg);
+    @apply border-[var(--info-solid)] bg-[var(--alert-wash)];
+  }
+  .eligibility-alert-pass {
+    --alert-wash: var(--tone-success-bg-soft);
+    @apply border-success bg-[var(--alert-wash)];
+  }
+  /* A check still running: a neutral card - grey border and wash, a dark tile. */
+  .eligibility-alert-pending {
+    --alert-wash: var(--surface);
+    @apply border-border bg-[var(--alert-wash)];
+  }
+  .eligibility-alert-pending .eligibility-alert-icon {
+    @apply bg-[var(--charcoal-panel)];
+  }
+  .eligibility-alert-advisory {
+    --alert-wash: var(--info-banner-bg);
+    @apply border-[var(--advisory-solid)] bg-[var(--alert-wash)];
+  }
+  .reading-column,
+  .narrow-panel {
+    @apply max-w-xl mx-auto;
+  }
+  .page-bleed {
+    @apply -mx-8 -mt-8;
+  }
+  .focus-ring {
+    @apply focus:outline-none focus-visible:shadow-[var(--focus-ring)];
+  }
+  .empty-page {
+    @apply p-8 max-w-2xl mx-auto text-center flex flex-col items-center justify-center min-h-[50vh];
+  }
+  .card-surface {
+    background-color: var(--surface);
+  }
+  .sticky-corner {
+    @apply pointer-events-none sticky top-6 z-[var(--z-raised)] flex h-0 items-start justify-end;
+  }
+  .fill-column {
+    @apply flex flex-1 flex-col;
+  }
+  .inert-region {
+    @apply [&_button]:pointer-events-none [&_input]:pointer-events-none [&_select]:pointer-events-none [&_textarea]:pointer-events-none [&_a]:pointer-events-none select-none;
+  }
+  .summary-value {
+    @apply min-w-0 break-words;
+  }
+  .step-header {
+    @apply min-h-[var(--size-step-header-min-h)] mb-4;
+  }
+  .mirror-section {
+    @apply relative;
+  }
+  .mirror-section .mirror-corner {
+    @apply right-0 top-0;
+  }
+  .footer-bar-pad {
+    @apply px-4 py-4 sm:px-8;
+  }
+  .customer-view-btn {
+    @apply !border-transparent !shadow-none !bg-[var(--customer-view-bg)] !text-[var(--customer-view-fg)] enabled:hover:!bg-[var(--customer-view-bg-hover)];
+  }
+  .map-fill {
+    @apply flex-1 min-h-80;
+  }
 }
 
 /* Text, layout and card helpers the design-system stories (and the applications) use; kept with the design system so Storybook renders them. */

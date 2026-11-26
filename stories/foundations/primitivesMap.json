@@ -3,6 +3,14 @@
     "kind": "page",
     "story": "Primitives/Badge"
   },
+  "CameraCaptureButton.tsx": {
+    "kind": "page",
+    "story": "Forms/Camera Capture Button"
+  },
+  "CheckoutSummaryTables.tsx": {
+    "kind": "page",
+    "story": "Primitives/Checkout Summary Tables"
+  },
   "ChoiceCards.tsx": {
     "kind": "page",
     "story": "Forms/Choice Cards"
@@ -11,9 +19,21 @@
     "kind": "page",
     "story": "Primitives/Close Button"
   },
+  "CommentsField.tsx": {
+    "kind": "page",
+    "story": "Forms/Comments Field"
+  },
   "CountryMarker.tsx": {
     "kind": "page",
     "story": "Primitives/Country Marker"
+  },
+  "CustomerMirrorPanel.tsx": {
+    "kind": "page",
+    "story": "Navigation/Customer Mirror Panel"
+  },
+  "CustomerViewButton.tsx": {
+    "kind": "page",
+    "story": "Navigation/Customer View Button"
   },
   "DataTable.tsx": {
     "kind": "page",
@@ -23,6 +43,14 @@
     "kind": "page",
     "story": "Forms/Date Input"
   },
+  "DocumentCaptureActions.tsx": {
+    "kind": "page",
+    "story": "Forms/Document Capture Actions"
+  },
+  "DocumentFileMeta.tsx": {
+    "kind": "page",
+    "story": "Forms/Document File Meta"
+  },
   "Drawer.tsx": {
     "kind": "page",
     "story": "Feedback & Status/Drawer"
@@ -31,9 +59,21 @@
     "kind": "page",
     "story": "Feedback & Status/Empty State"
   },
+  "EntityMissing.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Entity Missing"
+  },
   "ErrorBanner.tsx": {
     "kind": "page",
     "story": "Feedback & Status/Error Banner"
+  },
+  "ErrorBoundary.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Error Boundary"
+  },
+  "FileImagePreview.tsx": {
+    "kind": "page",
+    "story": "Forms/File Image Preview"
   },
   "Icon.tsx": {
     "kind": "page",
@@ -47,6 +87,10 @@
     "kind": "page",
     "story": "Forms/Input"
   },
+  "KeyInformationPanel.tsx": {
+    "kind": "page",
+    "story": "Primitives/Key Information Panel"
+  },
   "Modal.tsx": {
     "kind": "page",
     "story": "Feedback & Status/Modal"
@@ -55,10 +99,22 @@
     "kind": "page",
     "story": "Forms/Option Toggle"
   },
+  "OrderConfirmationScreen.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Order Confirmation Screen"
+  },
+  "OsmEmbed.tsx": {
+    "kind": "page",
+    "story": "Primitives/Map Embed"
+  },
   "OverlayPortal.tsx": {
     "kind": "internal",
     "story": "Feedback & Status/Dialog (base)",
     "note": "Mount point behind Modal and Drawer; not used on its own."
+  },
+  "PageHeader.tsx": {
+    "kind": "page",
+    "story": "Navigation/Page Header"
   },
   "Pager.tsx": {
     "kind": "page",
@@ -80,6 +136,14 @@
     "kind": "page",
     "story": "Forms/Radio"
   },
+  "RemoveDocumentDialog.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Confirmation Dialogs"
+  },
+  "ScanFailureNotice.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Scan Failure Notice"
+  },
   "SearchField.tsx": {
     "kind": "page",
     "story": "Forms/Search Field"
@@ -87,6 +151,10 @@
   "Select.tsx": {
     "kind": "page",
     "story": "Forms/Select"
+  },
+  "SignatureCapture.tsx": {
+    "kind": "page",
+    "story": "Forms/Signature Capture"
   },
   "SignaturePad.tsx": {
     "kind": "page",
@@ -96,9 +164,25 @@
     "kind": "page",
     "story": "Feedback & Status/Spinner"
   },
+  "StandaloneStepPage.tsx": {
+    "kind": "page",
+    "story": "Navigation/Standalone Step Page"
+  },
+  "StarStat.tsx": {
+    "kind": "page",
+    "story": "Primitives/Star Stat"
+  },
   "StatusSlot.tsx": {
     "kind": "page",
     "story": "Feedback & Status/Status Slot"
+  },
+  "StepSummarySection.tsx": {
+    "kind": "page",
+    "story": "Navigation/Step Summary Section"
+  },
+  "SummaryFieldRow.tsx": {
+    "kind": "page",
+    "story": "Forms/Summary Field Row"
   },
   "Switch.tsx": {
     "kind": "page",
@@ -135,6 +219,26 @@
   "VodafoneWordmark.tsx": {
     "kind": "page",
     "story": "Foundations/Brand"
+  },
+  "WizardDialogs.tsx": {
+    "kind": "page",
+    "story": "Feedback & Status/Confirmation Dialogs"
+  },
+  "WizardFooter.tsx": {
+    "kind": "page",
+    "story": "Navigation/Wizard Footer"
+  },
+  "WizardStepHeader.tsx": {
+    "kind": "page",
+    "story": "Navigation/Wizard Step Header"
+  },
+  "WizardStepPanel.tsx": {
+    "kind": "page",
+    "story": "Navigation/Wizard Step Panel"
+  },
+  "WizardTitleBand.tsx": {
+    "kind": "page",
+    "story": "Navigation/Wizard Title Band"
   },
   "buttonSurfaces.ts": {
     "kind": "helper",
@@ -182,5 +286,9 @@
   "tooltipGroup.ts": {
     "kind": "helper",
     "note": "React context behind TooltipGroup."
+  },
+  "useConfirmedRemoval.tsx": {
+    "kind": "helper",
+    "note": "Hook behind RemoveDocumentDialog: confirmRemoval(name, run) opens the prompt and renders `dialog`."
   }
 }

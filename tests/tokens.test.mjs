@@ -7,6 +7,7 @@ import { loadTokens, undefinedRefs, colourTokensWithoutDark } from './tokenModel
 // Raw-colour tokens that are deliberately the SAME in light and dark mode, with the reason. Everything else that holds a
 // raw colour must define a dark value in :root.dark (aliases and color-mix() follow their sources and are exempt).
 const CONSTANT_ACROSS_THEMES = {
+  '--summary-milestone': 'Step Summary progress fill and milestone disc; same orange in both themes',
   '--tag-primary-fg': 'white label on the solid plum Primary marker',
   '--accent': 'brand red; the accent fill is identical in both themes',
   '--accent-on': 'text on the accent fill',

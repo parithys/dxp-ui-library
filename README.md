@@ -82,6 +82,30 @@ npm run build-storybook
 5. Add a test in `tests/` when it carries a rule.
 6. `npm run typecheck && npm run lint && npm test && npm run build && npm run build-storybook`.
 
+### Live-edit a component inside an application
+
+The library is the single source of truth for reusable UI and its Storybook; an application keeps none. To see a change in the application as you make it:
+
+```bash
+npm run dev:app                  # watches src/, rebuilds, copies dist into ../prototype/node_modules/dxp-ui/dist
+npm run dev:app -- ../other-app  # another application (or DXP_APP=../other-app)
+npm run dev:app -- --once        # one build and copy
+```
+
+Run the application's own dev server as usual. The script copies (it never links), so the application keeps one copy of React. Before pushing, install the real tarball in the application (below) and run its checks, as CI does.
+
+### Promote a component from an application
+
+A reusable component should be started here. If one was written in an application first:
+
+1. `git mv` it into `src/components/primitives/` (helpers into `src/lib/` or `src/hooks/`). Replace every application import (store, router, mock data, business wording) with a prop, a callback or a provider (`LinkProvider` is the pattern for links).
+2. Move the classes it uses from the application's CSS into `src/styles/components.css` as single semantic rules, and its tokens into `src/styles/tokens.css`. Do not copy long utility strings: the class budget and the duplicate-class test reject them.
+3. Export it from `src/index.ts`, add a story under `stories/` and an entry in `stories/foundations/primitivesMap.json`.
+4. Move the assertions that read its source into a library test (`tests/movedComponents.test.mjs`); the application can no longer read it.
+5. Release (below), install in the application, rewrite its imports to the package, delete its copy.
+
+A component that is keyed to one product's data (a line-type tag, an ID-document upload) is a business component and stays in the application.
+
 ### Use a local build in an application before publishing
 
 Avoid a plain `npm link` / `file:` symlink: the library's own `react` copy makes React resolve twice. Install the packed tarball instead:

@@ -1,0 +1,71 @@
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from '../ui/button';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  /** When this changes (e.g. the route path) a boundary that has caught an error clears it and re-renders its children. */
+  resetKey?: string;
+  /** Where the fallback's way out leads (default "/"). An application mounted under a base path passes its own. */
+  homeHref?: string;
+  /** The fallback's way-out link text (default "Back to Home"). */
+  homeLabel?: string;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+// Class component required here: componentDidCatch/getDerivedStateFromError
+// have no functional-component equivalent. Guards a single routed subtree
+// (AppRouter) so a crash in one module screen doesn't white-screen the
+// persistent shell (Sidebar/PersonaSwitcher/Breadcrumbs stay mounted).
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  componentDidUpdate(prev: ErrorBoundaryProps) {
+    // Without this, one crashed screen left the fallback up for every other route until a full reload.
+    // oxlint-disable-next-line react/no-did-update-set-state -- deliberate: clears a caught error only when resetKey changes, which getDerivedStateFromProps cannot do without also clearing an error thrown by the very render that carried the new key
+    if (this.state.hasError && prev.resetKey !== this.props.resetKey) this.setState({ hasError: false });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+      return (
+        <div className="empty-page">
+          <h1 className="title title-2xl mb-2">Something Went Wrong</h1>
+          <p className="text-fg-2 mb-4">
+            This screen hit a problem and could not be shown. Try again, or reload the page if it keeps happening.
+          </p>
+          <div className="flex gap-3">
+            <Button onClick={() => this.setState({ hasError: false })}>
+              Try again
+            </Button>
+            <Button variant="secondary" onClick={() => window.location.reload()}>
+              Reload page
+            </Button>
+          </div>
+          <a href={this.props.homeHref ?? '/'} className="mt-3 link underline focus-ring rounded-[var(--radius-button)]">
+            {this.props.homeLabel ?? 'Back to Home'}
+          </a>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
